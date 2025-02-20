@@ -355,3 +355,51 @@ type StringToNumberFunction = arg: string=>number; // NO NO NO NO
 ```
 
 Function types are most useful when applied to callback functions. With how common callback functions are, it’s useful to know how to type them appropriately. Let’s get some practice using function types with callback functions!
+
+# Generic Types
+
+TypeScript’s *generics* are ways to create collections of types (and typed functions, and more) that share certain formal similarities. These collections are parameterized by one or more type variables.
+
+ Array type syntax `Array<T>` is generic because we can substitute any type (either pre-defined or custom) in the place of `T`. For example `Array<string>` is an array of strings.
+
+Generics give us the power to define our own collections of object types. Here’s an example
+
+```ts
+type Family<T> = {
+  parents: [T, T], mate: T, children: T[]
+};
+```
+
+This code defines a collection of object types, with a different type for every value of `T`. The generic `Family<T>` cannot actually be used as a type in a type annotation. Instead, we must substitute `T` with some type of our choosing, for example `string`. Then, `Family<string>` is *exactly* the same as the object type given by setting `T` to `string`: `{parents:[string,string], mate:string, children: string[]}`. So the following assignment will be error free:
+
+```ts
+let aStringFamily: Family<string> = {  
+  parents: ['stern string', 'nice string'],  
+  mate: 'string next door',  
+  children: ['stringy', 'stringo', 'stringina', 'stringolio']  
+};
+```
+
+In general, writing generic types with `type typeName<T>` allows us to use `T` within the type annotation as a type placeholder. Later, when the generic type is used, `T` is replaced with the provided type. (Writing `T` is just a convention. We could just as easily use `S` or `GenericType`. )
+
+# Generic Functions
+
+We can also use generics to create collections of typed functions
+
+```ts
+function getFilledArray(value, n) {  
+  return Array(n).fill(value);  
+}
+```
+
+Here, `getFilledArray('cheese', 3)` evaluates to `['cheese', 'cheese', 'cheese']`. No problem, right? Well, we run into a problem when we try to specify the function’s return type. We know it should be an array of whatever `value`‘s type is—do we have to write a separate type annotation for every type of `value`? Nope. Here, we are rescued by generic functions!
+
+```ts
+function getFilledArray<T>(value: T, n: number): T[] {
+  return Array(n).fill(value);
+}
+```
+
+The above code tells TypeScript to make sure that `value` and the returned array have the same type `T`. When the function is invoked, we will provide `T`‘s value. For example, we can invoke the function using `getFilledArray<string>('cheese', 3)`, which sets `T` equal to `string`. This still evaluates to `['cheese', 'cheese', 'cheese']`, but the function is now correctly typed and less prone to errors. The function `getFilledArray<string>` is precisely the same as if we had written `(value: string, n: number): string[]` in its type annotation.
+
+In general, writing generic functions with `function functionName<T>` allows us to use `T` within the type annotation as a type placeholder. Later, when the function is invoked, `T` is replaced with the provided type.
