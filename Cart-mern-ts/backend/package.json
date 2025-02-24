@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node app.js",
-    "dev": "nodemon --ext ts --exec \"node --loader ts-node/esm\" app.ts"
+    "dev": "nodemon --ext ts --exec \"node --loader ts-node/esm\" app.ts",
+    "seed": "node --loader ts-node/esm seed.ts"
   },
   "keywords": [],
   "author": "",
