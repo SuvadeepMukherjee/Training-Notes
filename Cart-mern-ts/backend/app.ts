@@ -6,6 +6,7 @@ import connectDB from "./config/db.ts";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import productRoutes from "./routes/productRoutes.ts";
+import userRoutes from "./routes/userRoutes.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files from the "public/images" directory when accessed via "/images" URL path
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 app.use("/api/products", productRoutes);
+app.use("/api/user", userRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

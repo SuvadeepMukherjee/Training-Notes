@@ -29,4 +29,5 @@ const Product: Model<IProduct> = mongoose.model<IProduct>(
   "Product",
   ProductSchema
 );
+export { Product, IProduct };
 export default Product;

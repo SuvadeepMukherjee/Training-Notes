@@ -6,7 +6,8 @@
     "build": "tsc",
     "start": "node app.js",
     "dev": "nodemon --ext ts --exec \"node --loader ts-node/esm\" app.ts",
-    "seed": "node --loader ts-node/esm seed.ts"
+    "seed": "node --loader ts-node/esm seed.ts",
+    "seed-users": "node --loader ts-node/esm seed-users.ts"
   },
   "keywords": [],
   "author": "",
