@@ -7,6 +7,7 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import productRoutes from "./routes/productRoutes.ts";
 import userRoutes from "./routes/userRoutes.ts";
+import cartRoutes from "./routes/cartRoutes.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 app.use("/api/products", productRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/cart", cartRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

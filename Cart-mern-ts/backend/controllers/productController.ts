@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Product from "../models/Product.ts";
-import Cart from "../models/Cart.js"; // Adjust the path as needed
+import Cart from "../models/Cart.js";
 import { ICart } from "../models/Cart.js";
 
 // Controller to fetch products based on category
