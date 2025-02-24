@@ -1,13 +1,16 @@
 import mongoose from "mongoose";
 import Product from "./models/Product.ts";
+import "dotenv/config";
 
-const MONGO_URI =
-  "mongodb+srv://suvadeepmwork:ewS70jhreFhYpf74@cluster0.fgi6n.mongodb.net/shop-db-ts?retryWrites=true&w=majority&appName=Cluster0";
+const MONGO_URI = process.env.MONGO_URI;
 
-mongoose.connect(MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-} as mongoose.ConnectOptions); // Explicitly cast to mongoose options
+mongoose.connect(
+  MONGO_URI as string,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  } as mongoose.ConnectOptions
+); // Explicitly cast to mongoose options
 
 const products = [
   {

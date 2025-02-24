@@ -2,9 +2,8 @@ import "dotenv/config"; // Load environment variables
 import express from "express";
 import cors from "cors";
 import path from "path";
-import mongoose from "mongoose";
 import connectDB from "./config/db.ts";
-import { fileURLToPath } from "url"; // Import for __dirname fix
+import { fileURLToPath } from "url";
 import { dirname } from "path";
 import productRoutes from "./routes/productRoutes.ts";
 
