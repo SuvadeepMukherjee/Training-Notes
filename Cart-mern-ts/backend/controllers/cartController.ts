@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 // - `Request`: Represents the HTTP request object (req).
 // - `Response`: Represents the HTTP response object (res).
 // These help with type safety when defining route handlers.
-import { Request, Response } from "express";
+import { Request, Response, RequestHandler } from "express";
 
 const getCart = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -122,62 +122,4 @@ const addToCart = async (
   }
 };
 
-const removeFromCart = async (
-  req: Request, //`Request` is a type from Express, ensuring `req` has expected properties like `body`, `params`,
-  res: Response //`Response` is a type from Express, ensuring `res` has methods like `status()`, `json()`
-): Promise<Response> => {
-  // `Promise<Response>` indicates the function is asynchronous and returns a Response object.
-  try {
-    // Destructure userId, productId, and quantity from the request body
-    const { userId, productId, quantity } = req.body;
-
-    // Check if userId and productId are provided
-    if (!userId || !productId) {
-      return res.status(400).json({ error: "Missing userId or productId" });
-    }
-
-    // Find the user's cart in the database
-    const cart = await Cart.findOne({ userId });
-
-    // If cart is not found, return a 404 error
-    if (!cart) {
-      return res.status(404).json({ error: "Cart not found" });
-    }
-
-    // Find the index of the product in the cart's items array
-    const existingItemIndex = cart.items.findIndex(
-      (item) => String(item.product) === String(productId) // Convert to string to ensure comparison works
-    );
-
-    // If the item is not found in the cart, return a 404 error
-    if (existingItemIndex === -1) {
-      return res.status(404).json({ error: "Item not in cart" });
-    }
-
-    // If the item has a quantity greater than 1, decrement the quantity
-    if (cart.items[existingItemIndex].quantity > 1) {
-      cart.items[existingItemIndex].quantity -= 1;
-    } else {
-      // Otherwise, remove the item from the cart
-      cart.items.splice(existingItemIndex, 1);
-    }
-
-    // If the cart is empty after removal, delete it from the database
-    if (cart.items.length === 0) {
-      await Cart.deleteOne({ userId });
-      return res.status(200).json({ message: "Cart is now empty", cart: null });
-    }
-
-    // Save the updated cart in the database
-    await cart.save();
-
-    // Return a success response with the updated cart
-    return res.status(200).json({ message: "Item removed from cart", cart });
-  } catch (error) {
-    // Catch any errors and return a 500 (server error) response
-    console.error("Error removing item:", error);
-    return res.status(500).json({ error: "Server error" });
-  }
-};
-
-export { getCart, addToCart, removeFromCart };
+export { getCart, addToCart };

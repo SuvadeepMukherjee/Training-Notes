@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import User from "../models/User.ts";
 
+//getUser Controller working properly
 const getUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId: string = req.params.userId;
