@@ -2,11 +2,11 @@ import express, { Router } from "express";
 import {
   getCart,
   addToCart,
-  //removeFromCart,
+  removeFromCart,
   // updateCart,
   //numberCart,
   //totalAmount,
-} from "../controllers/cartController.ts";
+} from "../controllers/cartController.js";
 
 const router: Router = express.Router();
 

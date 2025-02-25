@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Product from "../models/Product.ts";
-import Cart from "../models/Cart.js";
-import { ICart } from "../models/Cart.js";
+import Cart from "../models/Cart.ts";
+import { ICart } from "../models/Cart.ts";
 
 // Controller to fetch products based on category
 const getProducts = async (req: Request, res: Response): Promise<void> => {
