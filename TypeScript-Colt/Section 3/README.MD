@@ -54,5 +54,4 @@ myComplicatedData = 87;
 myComplicatedData = "abc";
 
 myComplicatedData = true;
-
 ```
