@@ -43,7 +43,6 @@ let onOrOff;
 
 onOrOff = 1;  
 onOrOff = false;
-
 ```
 
 In the code above, we declared the variable `onOrOff` without an initial value. TypeScript considers it to be of type `any`, and, therefore, doesn’t produce an error when we change the variable’s assignment from a `number` value to a `boolean` value.
@@ -62,7 +61,6 @@ mustBeAString = 'Catdog';
 
 mustBeAString = 1337;
 // Error: Type 'number' is not assignable to type 'string'
-
 ```
 
 In the code above, we explicitly declare `mustBeAString` to be of type `string` without assigning it an initial value. This enables us to assign it the value `'Catdog'` without complaint, but when we later attempt to assign it a numerical value, TypeScript will give us an error message telling us that a `number` is being improperly assigned to a variable of type `string`.
@@ -99,5 +97,3 @@ In the JSON, there are several properties:
 #### Usage
 
 Another neat addition is that by including a **tsconfig.json** file, you can now use the command `tsc` without any arguments in your terminal! The compiler will automatically recognize from your **tsconfig.json** file, what specific files to run on. You can still provide specific files like `tsc fileName.ts` if that’s the only file you want the compiler to check.
-
-
