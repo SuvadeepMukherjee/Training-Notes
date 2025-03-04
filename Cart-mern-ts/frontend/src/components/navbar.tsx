@@ -60,8 +60,11 @@ export const Navbar: React.FC = () => {
             setShowProfile(!showProfile);
           }}
         />
-        {showProfile && user !== null && (
-          <UserProfile user={user} getTotalCartItems={getTotalCartItems} />
+        {showProfile && user && (
+          <UserProfile
+            user={user as any}
+            getTotalCartItems={getTotalCartItems}
+          />
         )}
       </div>
     </div>

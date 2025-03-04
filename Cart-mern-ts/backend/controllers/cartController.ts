@@ -1,6 +1,6 @@
 import Cart from "../models/Cart.ts";
 import Product from "../models/Product.ts";
-import mongoose from "mongoose";
+
 import { IProduct } from "../models/Product.js";
 // Importing TypeScript types from Express:
 // - `Request`: Represents the HTTP request object (req).
@@ -36,16 +36,13 @@ const getCart = async (req: Request, res: Response): Promise<void> => {
         //Filters out items without a valid product
         .filter((item) => item.product)
         .map((item) => ({
-          // TypeScript doesn't infer the type of `item.product`, so it's cast as `any` to avoid errors
           productId: (item.product as any)._id,
           productName: (item.product as any).name || "Product",
           price: (item.product as any).price || 0,
           productImage: (item.product as any).image || "",
-          // Directly accessed since it's part of `cart.items`
           quantity: item.quantity,
         })),
     };
-    //Sends the formatted cart as a JSON response
     res.status(200).json(formattedCart);
   } catch (error) {
     console.error("Error fetching cart:", error);
@@ -54,7 +51,6 @@ const getCart = async (req: Request, res: Response): Promise<void> => {
 };
 
 //An interface in TypeScript is a way to define the shape of an object
-// Defining a custom interface that extends Express's `Request` type
 interface AddToCartRequest extends Request {
   body: {
     // Ensures `userId` is always a string
