@@ -18,7 +18,7 @@ interface ProductProps {
 interface ShopContextType {
   cartItems: { [key: string]: number };
   addToCart: (id: string) => void;
-  //removeFromCart: (id: string) => void;
+  removeFromCart: (id: string) => void;
 }
 
 // Product component
@@ -31,9 +31,7 @@ export const Product: React.FC<ProductProps> = ({ data }) => {
     throw new Error("ShopContext must be used within a ShopContextProvider");
   }
 
-  const { cartItems } = context;
-  //const { addToCart, removeFromCart, cartItems } = context;
-  const { addToCart } = context;
+  const { addToCart, removeFromCart, cartItems } = context;
 
   const cartItemAmount: number = cartItems[_id] || 0;
 
@@ -49,10 +47,10 @@ export const Product: React.FC<ProductProps> = ({ data }) => {
       <button className="addToCartBttn" onClick={() => addToCart(_id)}>
         Add To Cart {cartItemAmount > 0 && <>({cartItemAmount})</>}
       </button>
-      {/* <div className="countHandler">
+      <div className="countHandler">
         <button onClick={() => removeFromCart(_id)}>-</button>
         <button onClick={() => addToCart(_id)}>+</button>
-      </div> */}
+      </div>
     </div>
   );
 };

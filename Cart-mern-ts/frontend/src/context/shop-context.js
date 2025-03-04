@@ -79,38 +79,38 @@ export const ShopContextProvider = (props) => {
   };
 
   //itemId is the product ID of the item being added to the cart(passed as an argument when calling addToCart)
-  //   const removeFromCart = async (itemId) => {
-  //     try {
-  //       const obj = { userId, productId: itemId, quantity: 1 };
-  //       await axios.delete("http://localhost:5000/api/cart/remove", {
-  //         data: obj,
-  //       });
-  //       // Update the cartItems state
-  //       setCartItems((prev) => {
-  //         // Copy previous cart state
-  //         const updatedCart = { ...prev };
+  const removeFromCart = async (itemId) => {
+    try {
+      const obj = { userId, productId: itemId, quantity: 1 };
+      await axios.delete("http://localhost:5000/api/cart/remove", {
+        data: obj,
+      });
+      // Update the cartItems state
+      setCartItems((prev) => {
+        // Copy previous cart state
+        const updatedCart = { ...prev };
 
-  //         // If the item is not found in the cart, alert the user and return the same state
-  //         if (!updatedCart[itemId]) {
-  //           alert("This item is already at 0 and cannot be reduced further.");
-  //           return prev; // Prevents state update
-  //         }
-  //         // If the item quantity is 1, remove it from the cart completely
-  //         if (updatedCart[itemId] === 1) {
-  //           alert("This item is already at 1. Removing it completely.");
-  //           delete updatedCart[itemId]; // Remove item from  state
-  //         } else {
-  //           updatedCart[itemId] -= 1; // Decrease quantity normally
-  //         }
-  //         // Fetch and update the total cart item count
-  //         fetchTotalCartItems();
+        // If the item is not found in the cart, alert the user and return the same state
+        if (!updatedCart[itemId]) {
+          alert("This item is already at 0 and cannot be reduced further.");
+          return prev; // Prevents state update
+        }
+        // If the item quantity is 1, remove it from the cart completely
+        if (updatedCart[itemId] === 1) {
+          alert("This item is already at 1. Removing it completely.");
+          delete updatedCart[itemId]; // Remove item from  state
+        } else {
+          updatedCart[itemId] -= 1; // Decrease quantity normally
+        }
+        // Fetch and update the total cart item count
+        fetchTotalCartItems();
 
-  //         return updatedCart;
-  //       });
-  //     } catch (error) {
-  //       console.error("Error removing item from cart:", error);
-  //     }
-  //   };
+        return updatedCart;
+      });
+    } catch (error) {
+      console.error("Error removing item from cart:", error);
+    }
+  };
 
   // const getTotalCartAmount = async () => {
   //   try {
@@ -162,7 +162,7 @@ export const ShopContextProvider = (props) => {
     // userId,
     cartItems,
     addToCart,
-    // removeFromCart,
+    removeFromCart,
     // getTotalCartAmount,
     getTotalCartItems,
     // fetchCartItems,
