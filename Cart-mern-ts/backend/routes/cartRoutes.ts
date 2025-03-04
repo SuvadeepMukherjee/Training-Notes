@@ -4,14 +4,14 @@ import {
   addToCart,
   //removeFromCart,
   // updateCart,
-  //numberCart,
-  //totalAmount,
+  numberCart,
+  totalAmount,
 } from "../controllers/cartController.ts";
 
 const router: Router = express.Router();
 
-//router.get("/numberCart", numberCart);
-//router.get("/totalAmount", totalAmount);
+router.get("/numberCart", numberCart);
+router.get("/totalAmount", totalAmount);
 
 router.post("/add", addToCart);
 //router.delete("/remove", removeFromCart);

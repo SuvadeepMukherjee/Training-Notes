@@ -1,6 +1,7 @@
 import Cart from "../models/Cart.ts";
 import Product from "../models/Product.ts";
 import mongoose from "mongoose";
+import { IProduct } from "../models/Product.js";
 // Importing TypeScript types from Express:
 // - `Request`: Represents the HTTP request object (req).
 // - `Response`: Represents the HTTP response object (res).
@@ -122,4 +123,65 @@ const addToCart = async (
   }
 };
 
-export { getCart, addToCart };
+const totalAmount = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { userId } = req.query;
+
+    if (!userId || typeof userId !== "string") {
+      res
+        .status(400)
+        .json({ message: "User ID is required and must be a string" });
+    }
+
+    const cart = await Cart.findOne({ userId }).populate("items.product");
+
+    if (!cart) {
+      res.json({ totalAmount: 0 });
+    }
+
+    let totalAmount = 0;
+    for (const item of cart!.items) {
+      const product = item.product as IProduct; // Explicitly cast item.product as IProduct
+
+      if (product && typeof product === "object" && "price" in product) {
+        totalAmount += product.price * item.quantity;
+      }
+    }
+
+    res.json({ totalAmount });
+  } catch (error) {
+    console.error("Error fetching total cart amount:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const numberCart = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { userId } = req.query;
+
+    if (!userId || typeof userId !== "string") {
+      res
+        .status(400)
+        .json({ message: "User ID is required and must be a string" });
+      return;
+    }
+
+    const cart = await Cart.findOne({ userId });
+
+    if (!cart || !cart.items.length) {
+      res.status(200).json({ totalItems: 0 });
+      return;
+    }
+
+    const totalItems = cart.items.reduce(
+      (acc: number, item: { quantity: number }) => acc + item.quantity,
+      0
+    );
+
+    res.status(200).json({ totalItems });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+
+export { getCart, addToCart, totalAmount, numberCart };

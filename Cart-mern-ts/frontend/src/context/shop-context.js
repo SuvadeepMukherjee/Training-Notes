@@ -112,29 +112,29 @@ export const ShopContextProvider = (props) => {
   //     }
   //   };
 
-  //   const getTotalCartAmount = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://localhost:5000/api/cart/totalAmount?userId=${userId}`
-  //       );
-  //       return response.data.totalAmount || 0;
-  //     } catch (error) {
-  //       console.error("Error fetching total cart amount:", error);
-  //       return 0;
-  //     }
-  //   };
+  // const getTotalCartAmount = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:5000/api/cart/totalAmount?userId=${userId}`
+  //     );
+  //     return response.data.totalAmount || 0;
+  //   } catch (error) {
+  //     console.error("Error fetching total cart amount:", error);
+  //     return 0;
+  //   }
+  // };
 
-  //   const getTotalCartItems = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://localhost:5000/api/cart/numberCart?userId=${userId}`
-  //       );
-  //       return response.data.totalItems || 0;
-  //     } catch (error) {
-  //       console.error("Error fetching cart count:", error);
-  //       return 0;
-  //     }
-  //   };
+  const getTotalCartItems = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/cart/numberCart?userId=${userId}`
+      );
+      return response.data.totalItems || 0;
+    } catch (error) {
+      console.error("Error fetching cart count:", error);
+      return 0;
+    }
+  };
 
   //useEffect hook to fetch user profile data when the component mounts
   useEffect(() => {
@@ -164,7 +164,7 @@ export const ShopContextProvider = (props) => {
     // addToCart,
     // removeFromCart,
     // getTotalCartAmount,
-    // getTotalCartItems,
+    getTotalCartItems,
     // fetchCartItems,
   };
 
