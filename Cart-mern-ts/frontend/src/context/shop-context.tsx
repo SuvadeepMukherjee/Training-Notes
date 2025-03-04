@@ -1,14 +1,6 @@
 import React, { createContext, useState, useEffect, ReactNode } from "react";
 import axios from "axios";
 
-// Define Product type
-interface Product {
-  _id: string;
-  productName: string;
-  price: number;
-  productImage: string;
-}
-
 // Define Cart Items type (key-value pair: productId -> quantity)
 interface CartItems {
   [productId: string]: number;
