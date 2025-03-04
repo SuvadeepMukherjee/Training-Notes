@@ -184,4 +184,52 @@ const numberCart = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export { getCart, addToCart, totalAmount, numberCart };
+const removeFromCart = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { userId, productId } = req.body;
+
+    // Validate required fields
+    if (!userId || !productId) {
+      res.status(400).json({ error: "Missing userId or productId" });
+    }
+
+    // Find the user's cart
+    const cart = await Cart.findOne({ userId });
+
+    // If cart does not exist, return an error
+    if (!cart) {
+      res.status(404).json({ error: "Cart not found" });
+    }
+
+    // Find the index of the product in the cart
+    const existingItemIndex = cart!.items.findIndex(
+      (item) => String(item.product) === String(productId)
+    );
+
+    // If the product is not in the cart, return an error
+    if (existingItemIndex === -1) {
+      res.status(404).json({ error: "Item not in cart" });
+    }
+
+    // Check if the item's quantity is more than 1, then decrement quantity
+    if (cart!.items[existingItemIndex].quantity > 1) {
+      cart!.items[existingItemIndex].quantity -= 1;
+    } else {
+      cart!.items.splice(existingItemIndex, 1);
+    }
+
+    // If cart is empty, delete it
+    if (cart!.items.length === 0) {
+      await Cart.deleteOne({ userId });
+      res.status(200).json({ message: "Cart is now empty", cart: null });
+    }
+
+    await cart!.save();
+    res.status(200).json({ message: "Item removed from cart", cart });
+  } catch (error) {
+    console.error("Error removing item:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+export { getCart, addToCart, totalAmount, numberCart, removeFromCart };

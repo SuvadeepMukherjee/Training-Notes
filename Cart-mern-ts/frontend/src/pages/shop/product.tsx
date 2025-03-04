@@ -17,7 +17,7 @@ interface ProductProps {
 // Define the ShopContext type (update this based on actual implementation)
 interface ShopContextType {
   cartItems: { [key: string]: number };
-  //addToCart: (id: string) => void;
+  addToCart: (id: string) => void;
   //removeFromCart: (id: string) => void;
 }
 
@@ -33,8 +33,9 @@ export const Product: React.FC<ProductProps> = ({ data }) => {
 
   const { cartItems } = context;
   //const { addToCart, removeFromCart, cartItems } = context;
+  const { addToCart } = context;
 
-  //const cartItemAmount: number = cartItems[_id] || 0;
+  const cartItemAmount: number = cartItems[_id] || 0;
 
   return (
     <div className="product">
@@ -45,9 +46,9 @@ export const Product: React.FC<ProductProps> = ({ data }) => {
         </p>
         <p>Rs {price}</p>
       </div>
-      {/* <button className="addToCartBttn" onClick={() => addToCart(_id)}>
+      <button className="addToCartBttn" onClick={() => addToCart(_id)}>
         Add To Cart {cartItemAmount > 0 && <>({cartItemAmount})</>}
-      </button> */}
+      </button>
       {/* <div className="countHandler">
         <button onClick={() => removeFromCart(_id)}>-</button>
         <button onClick={() => addToCart(_id)}>+</button>

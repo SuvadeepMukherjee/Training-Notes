@@ -56,27 +56,27 @@ export const ShopContextProvider = (props) => {
   }, []); // Empty dependency array ensures it runs only once when the component mounts
 
   //itemId is the product ID of the item being added to the cart(passed as an argument when calling addToCart)
-  //   const addToCart = async (itemId) => {
-  //     try {
-  //       const obj = { userId, productId: itemId, quantity: 1 };
+  const addToCart = async (itemId) => {
+    try {
+      const obj = { userId, productId: itemId, quantity: 1 };
 
-  //       await axios.post("http://localhost:5000/api/cart/add", obj);
+      await axios.post("http://localhost:5000/api/cart/add", obj);
 
-  //       //find the object then update it
-  //       // Update the cartItems state:
-  //       // - Copy previous cart items
-  //       // - Increment the quantity for the added product (or set to 1 if it's new)
-  //       setCartItems((prev) => ({
-  //         ...prev,
-  //         [itemId]: (prev[itemId] || 0) + 1,
-  //       }));
-  //       //console.log("fetchCartItems  working ", cartItems);
-  //       // Fetch and update the total cart item count
-  //       fetchTotalCartItems();
-  //     } catch (error) {
-  //       console.error("Error adding item to cart:", error);
-  //     }
-  //   };
+      //find the object then update it
+      // Update the cartItems state:
+      // - Copy previous cart items
+      // - Increment the quantity for the added product (or set to 1 if it's new)
+      setCartItems((prev) => ({
+        ...prev,
+        [itemId]: (prev[itemId] || 0) + 1,
+      }));
+      //console.log("fetchCartItems  working ", cartItems);
+      // Fetch and update the total cart item count
+      fetchTotalCartItems();
+    } catch (error) {
+      console.error("Error adding item to cart:", error);
+    }
+  };
 
   //itemId is the product ID of the item being added to the cart(passed as an argument when calling addToCart)
   //   const removeFromCart = async (itemId) => {
@@ -161,7 +161,7 @@ export const ShopContextProvider = (props) => {
     user,
     // userId,
     cartItems,
-    // addToCart,
+    addToCart,
     // removeFromCart,
     // getTotalCartAmount,
     getTotalCartItems,

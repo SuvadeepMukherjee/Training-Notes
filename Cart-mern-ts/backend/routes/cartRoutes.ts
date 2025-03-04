@@ -2,7 +2,7 @@ import express, { Router } from "express";
 import {
   getCart,
   addToCart,
-  //removeFromCart,
+  removeFromCart,
   // updateCart,
   numberCart,
   totalAmount,
@@ -14,7 +14,7 @@ router.get("/numberCart", numberCart);
 router.get("/totalAmount", totalAmount);
 
 router.post("/add", addToCart);
-//router.delete("/remove", removeFromCart);
+router.delete("/remove", removeFromCart);
 
 router.get("/:userId", getCart);
 
