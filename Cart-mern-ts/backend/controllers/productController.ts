@@ -1,19 +1,36 @@
+//req:Request represents the incoming request
+//res:Response is used to send the response
 import { Request, Response } from "express";
 import Product from "../models/Product.ts";
 import Cart from "../models/Cart.ts";
 import { ICart } from "../models/Cart.ts";
 
-// Controller to fetch products based on category
+/**
+ * Retrieves products from the database with optional category filtering.
+ * - If a category is provided, filters products accordingly; otherwise, returns all products.
+ */
+
+//Promise<void> indicates that this function does not explicitly return a value
 const getProducts = async (req: Request, res: Response): Promise<void> => {
   try {
+    //extracts category from request query parameters
     const { category } = req.query;
-    let query: Record<string, unknown> = {}; // Type-safe query object
+    // Initializes an empty query object to store filtering conditions.
+    // `Record<string, unknown>` is a TypeScript **generic type**.
+    // - `Record<K, T>` is a generic utility type in TypeScript.
+    // - `K` (the first parameter) represents the keys, which must be of type `string`.
+    // - `T` (the second parameter) represents the values, which are `unknown` here (any type)
+    // - This ensures that `query` is an object where all keys are strings, and the values can be of any type.
+    let query: Record<string, unknown> = {};
 
+    // If a category is provided, is not "all", and is a valid string, add it to the query object.
     if (category && category !== "all" && typeof category === "string") {
-      query.category = category;
+      query.category = category; // Filters products based on the specified category.
     }
 
+    // Queries the database for products that match the filtering criteria.
     const products = await Product.find(query);
+    // Sends the retrieved products as a JSON response.
     res.json(products);
   } catch (error) {
     console.error(error);
@@ -21,13 +38,18 @@ const getProducts = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+/**
+ * Retrieves the quantity of products in a user's cart.
+ */
 const getProductQuantityInCart = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
+    //Extract userId from query parameters
     const { userId } = req.query;
 
+    //Validate userId
     if (!userId || typeof userId !== "string") {
       res
         .status(400)
@@ -35,20 +57,24 @@ const getProductQuantityInCart = async (
       return;
     }
 
+    // Find the cart for the given user and populate product details
     const cart: ICart | null = await Cart.findOne({ userId }).populate(
       "items.product"
     );
 
+    // If no cart is found, return a 404 error
     if (!cart) {
       res.status(404).json({ message: "Cart not found" });
       return;
     }
 
+    // Extract product and quantity details from the cart items
     const cartItems = cart.items.map((item) => ({
       product: item.product,
       quantity: item.quantity,
     }));
 
+    // Respond with the cart details
     res.json({ userId, cartItems });
   } catch (error) {
     console.error(error);

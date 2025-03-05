@@ -1,13 +1,15 @@
+// Import Express framework and Router module
 import express, { Router } from "express";
+
 import {
   getCart,
   addToCart,
   removeFromCart,
-  // updateCart,
   numberCart,
   totalAmount,
 } from "../controllers/cartController.ts";
 
+// Creating an Express Router instance
 const router: Router = express.Router();
 
 router.get("/numberCart", numberCart);
