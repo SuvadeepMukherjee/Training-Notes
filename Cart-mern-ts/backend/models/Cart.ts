@@ -1,19 +1,24 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 import { IProduct } from "./Product.ts"; // Now this will work
 
-// Define Cart Item Interface
+// Interface defining the structure of an object
+//The `ICart` interface defines the structure of a ICartIten object in TypeScript.
 interface ICartItem {
-  product: string | IProduct; // Product reference as ObjectId or populated object
+  product: string | IProduct; // Product reference
   quantity: number;
 }
 
-// Define Cart Interface
+// Interface defining the structure of an object
+//The `ICart` interface defines the structure of a cart object in TypeScript.
+//inherits all properties and methods from the `Document` interface.
 export interface ICart extends Document {
   userId: string;
   items: ICartItem[];
 }
 
-// Define Schema
+// Define the schema with TypeScript generics
+// A generic in TypeScript allows us to create reusable, flexible, and type-safe components, functions, and classes
+// // `Schema<ICart>` uses a generic type to enforce that this schema follows the `ICart` interface.
 const CartSchema: Schema<ICart> = new Schema({
   userId: { type: String, required: true },
   items: [
@@ -24,7 +29,7 @@ const CartSchema: Schema<ICart> = new Schema({
   ],
 });
 
-// Create Model
+// Creating a Mongoose model for the "Cart" collection with TypeScript type safety
 const Cart: Model<ICart> = mongoose.model<ICart>("Cart", CartSchema);
 
 export default Cart;
