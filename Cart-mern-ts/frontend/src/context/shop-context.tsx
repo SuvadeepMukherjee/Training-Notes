@@ -7,12 +7,11 @@ import React, { createContext, useState, useEffect, ReactNode } from "react";
 //Import the axios library for making HTTP requests
 import axios from "axios";
 
-// An `interface` in TypeScript is a way to define the structure of an object.
-// This interface `CartItems` defines the structure of an object
-// where the keys are `productId` values (strings) and the values are numbers
+// An interface in TypeScript is a way to define the structure of an object.
+// This interface CartItems defines the structure of an object
+// where the keys are productId values (strings) and the values are numbers
 // representing the quantity of each product in the cart.
-
-// The `[productId: string]: number;` syntax is called  index signature,
+// The [productId: string]: number; syntax is called  index signature,
 // which means this object can have any number of properties where the key is a string
 // (representing the product ID), and the value is a number (representing the quantity of that product).
 interface CartItems {
@@ -45,6 +44,7 @@ interface ShopContextType {
 }
 
 // Creates a React context named ShopContext with a default value of null
+// The | (union type) allows ShopContext to be either ShopContextType or null.
 export const ShopContext = createContext<ShopContextType | null>(null);
 
 // An interface in TypeScript is a way to define the structure of an object.

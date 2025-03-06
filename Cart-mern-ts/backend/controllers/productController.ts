@@ -16,11 +16,11 @@ const getProducts = async (req: Request, res: Response): Promise<void> => {
     //extracts category from request query parameters
     const { category } = req.query;
     // Initializes an empty query object to store filtering conditions.
-    // `Record<string, unknown>` is a TypeScript **generic type**.
-    // - `Record<K, T>` is a generic utility type in TypeScript.
-    // - `K` (the first parameter) represents the keys, which must be of type `string`.
-    // - `T` (the second parameter) represents the values, which are `unknown` here (any type)
-    // - This ensures that `query` is an object where all keys are strings, and the values can be of any type.
+    // Record<string, unknown> is a TypeScript generic type.
+    // - Record<K, T> is a generic utility type in TypeScript.
+    // - K (the first parameter) represents the keys, which must be of type string.
+    // - T (the second parameter) represents the values, which are unknown here (any type)
+    // - This ensures that query is an object where all keys are strings, and the values can be of any type.
     let query: Record<string, unknown> = {};
 
     // If a category is provided, is not "all", and is a valid string, add it to the query object.

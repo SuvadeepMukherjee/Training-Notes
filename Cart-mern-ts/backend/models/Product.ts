@@ -1,8 +1,8 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 // Interface defining the structure of an object
-//The `IProduct` interface defines the structure of a product object in TypeScript.
-//inherits all properties and methods from the `Document` interface.
+//The IProduct interface defines the structure of a product object in TypeScript.
+//inherits all properties and methods from the Document interface.
 interface IProduct extends Document {
   _id: number;
   productName: string;
@@ -14,7 +14,7 @@ interface IProduct extends Document {
 
 // Define the schema with TypeScript generics
 // A generic in TypeScript allows us to create reusable, flexible, and type-safe components, functions, and classes
-// // `Schema<IProduct>` uses a generic type to enforce that this schema follows the `IProduct` interface.
+// // Schema<IProduct> uses a generic type to enforce that this schema follows the IProduct interface.
 const ProductSchema = new Schema<IProduct>({
   _id: { type: Number, required: true },
   productName: { type: String, required: true },

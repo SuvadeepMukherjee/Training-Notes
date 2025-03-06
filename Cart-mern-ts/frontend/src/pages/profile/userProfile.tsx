@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import "./userProfile.css";
 import axios from "axios";
 
-// An `interface` in TypeScript is a way to define the structure of an object.
+// An interface in TypeScript is a way to define the structure of an object.
 interface User {
   userId: string;
 }
 
-// An `interface` in TypeScript is a way to define the structure of an object.
+// An interface in TypeScript is a way to define the structure of an object.
 interface UserProfileProps {
   user?: User; // user is optional
   getTotalCartItems: () => Promise<number>; // Function returns a Promise resolving to a number
@@ -19,6 +19,13 @@ interface UserProfileProps {
  * This component displays the user's profile information, including their ID,
  * the total number of items in their cart, and the total cart amount.
  *
+ * Role of Generics in this Component:
+ *  The React.FC<UserProfileProps> uses a generic type to ensure that the component
+ *   strictly adheres to the expected props structure.
+ *  React.FC<T> is a generic interface in React where T defines the expected props type.
+ * - By specifying UserProfileProps as the generic type parameter, TypeScript enforces type
+ *   safety by ensuring that the UserProfile component only receives props that match the
+ *   UserProfileProps interface.
  * Props:
  * - user: An object containing the user's details (userId)
  * - getTotalCartItems: A function that returns the total number of items in the cart
@@ -31,6 +38,7 @@ interface UserProfileProps {
  * Returns:
  * - A user profile section displaying the user's ID, total items in the cart, and total cart amount.
  */
+//We are passing the user and getTotalCartItems  to the UserProfile component from the navbar component.
 const UserProfile: React.FC<UserProfileProps> = ({
   user,
   getTotalCartItems,
@@ -68,8 +76,8 @@ const UserProfile: React.FC<UserProfileProps> = ({
     }
   };
 
-  // This useEffect runs whenever the user state changes.
-  // If a user exists, it calls fetchTotalCartAmount to retrieve and update the total cart amount.
+  //This useEffect runs whenever the user state changes.
+  //If a user exists, it calls fetchTotalCartAmount to retrieve and update the total cart amount.
   useEffect(() => {
     if (user) {
       fetchTotalCartAmount();

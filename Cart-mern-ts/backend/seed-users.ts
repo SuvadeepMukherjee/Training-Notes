@@ -2,9 +2,8 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import User from "./models/User.ts";
 
-dotenv.config(); // Load environment variables
+dotenv.config();
 
-// Connect to MongoDB
 const connectDB = async (): Promise<void> => {
   try {
     await mongoose.connect(
@@ -21,7 +20,6 @@ const connectDB = async (): Promise<void> => {
   }
 };
 
-// Seed function to add dummy users
 const seedUsers = async (): Promise<void> => {
   try {
     const userIds: string[] = [
@@ -33,7 +31,6 @@ const seedUsers = async (): Promise<void> => {
       "e67i89j0k1l2m3n4o5p6q7s9",
     ];
 
-    // Loop through the userIds and create users if they don't already exist
     for (const userId of userIds) {
       const existingUser = await User.findOne({ userId }).exec();
 
@@ -48,12 +45,10 @@ const seedUsers = async (): Promise<void> => {
   } catch (error) {
     console.error("Error seeding users:", error);
   } finally {
-    // Close the database connection
     await mongoose.connection.close();
   }
 };
 
-// Run the seed function
 const run = async (): Promise<void> => {
   await connectDB();
   await seedUsers();

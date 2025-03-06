@@ -2,8 +2,8 @@ import Cart from "../models/Cart.ts";
 import Product from "../models/Product.ts";
 import { IProduct } from "../models/Product.js";
 
-// - `Request`: Represents the HTTP request object (req).
-// - `Response`: Represents the HTTP response object (res).
+// - Request: Represents the HTTP request object (req).
+// - Response: Represents the HTTP response object (res).
 import { Request, Response } from "express";
 // Return type `Promise<void>` indicates an async function that does not explicitly return a value.
 
@@ -22,7 +22,7 @@ const getCart = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Fetches the cart for the given userId from the database
-    // Uses `populate("items.product")` to replace product IDs in items with actual product details
+    // Uses populate("items.product") to replace product IDs in items with actual product details
     const cart = await Cart.findOne({ userId }).populate("items.product");
 
     //If no cart is found or it's empty , return an empty items array
@@ -55,15 +55,15 @@ const getCart = async (req: Request, res: Response): Promise<void> => {
 };
 
 // Interface defining the structure of an object
-//inherits all properties and methods from the `Request` interface.
+//inherits all properties and methods from the Request interface.
 interface AddToCartRequest extends Request {
   //body refers to the request payload sent by the client in an HTTP request
   body: {
-    userId: string; // Ensures `userId` is always a string
+    userId: string; // Ensures userId is always a string
 
-    productId: string; // Ensures `productId` is always a string
+    productId: string; // Ensures productId is always a string
 
-    quantity: number; // Ensures `quantity` is always a number
+    quantity: number; // Ensures quantity is always a number
   };
 }
 
@@ -75,7 +75,7 @@ const addToCart = async (
 
   res: Response // Express Response object used for sending responses
 ): Promise<void> => {
-  // Return type `Promise<void>` indicates an async function that does not explicitly return a value.
+  // Return type Promise<void> indicates an async function that does not explicitly return a value.
   try {
     // Destructuring request body
     const { userId, productId, quantity } = req.body;
@@ -101,7 +101,7 @@ const addToCart = async (
       cart = new Cart({ userId, items: [] });
     }
 
-    // Ensures `items` is always an array
+    // Ensures items is always an array
     cart.items = cart.items || []; // Initialize a new cart with an empty items array
 
     // Check if the product already exists in the cart
@@ -132,15 +132,15 @@ const addToCart = async (
  *Controller to calculate the total amount of items in a user's cart.
  */
 
-// `req: Request` represents the incoming request object.
-// `res: Response` is used to send back the response.
-// `Promise<void>` indicates that this function is asynchronous and does not return a value directly.
+// req: Request represents the incoming request object.
+// res: Response is used to send back the response.
+// Promise<void> indicates that this function is asynchronous and does not return a value directly.
 const totalAmount = async (req: Request, res: Response): Promise<void> => {
   try {
-    // Extracts `userId` from the request query parameters.
+    // Extracts userId from the request query parameters.
     const { userId } = req.query;
 
-    // Validates `userId`: ensures it exists and is of type `string`.
+    // Validates userId: ensures it exists and is of type string.
     if (!userId || typeof userId !== "string") {
       res
         .status(400)
@@ -152,7 +152,7 @@ const totalAmount = async (req: Request, res: Response): Promise<void> => {
     // Searches for the user's cart in the database and populates product details.
     const cart = await Cart.findOne({ userId }).populate("items.product");
 
-    // If the cart does not exist, return a total amount of `0`.
+    // If the cart does not exist, return a total amount of 0.
     if (!cart) {
       res.json({ totalAmount: 0 });
       return;
@@ -163,7 +163,7 @@ const totalAmount = async (req: Request, res: Response): Promise<void> => {
     for (const item of cart!.items) {
       const product = item.product as IProduct; // Explicitly cast item.product as IProduct
 
-      // Ensures `product` exists and has a `price` property before performing calculations.
+      // Ensures product exists and has a price property before performing calculations.
       if (product && typeof product === "object" && "price" in product) {
         totalAmount += product.price * item.quantity;
       }
@@ -179,15 +179,15 @@ const totalAmount = async (req: Request, res: Response): Promise<void> => {
 /**
  * Controller to get the total number of items in a user's cart
  */
-// `req: Request` represents the incoming request.
-// `res: Response` is used to send the response.
-// `Promise<void>` indicates that this function does not return a value explicitly.
+// req: Request represents the incoming request.
+// res: Response is used to send the response.
+// Promise<void> indicates that this function does not return a value explicitly.
 const numberCart = async (req: Request, res: Response): Promise<void> => {
   try {
-    // Extracts `userId` from the request query parameters.
+    // Extracts userId from the request query parameters.
     const { userId } = req.query;
 
-    // Validates `userId`: ensures it exists and is of type `string`.
+    // Validates userId: ensures it exists and is of type string.
     if (!userId || typeof userId !== "string") {
       res
         .status(400)
@@ -198,14 +198,14 @@ const numberCart = async (req: Request, res: Response): Promise<void> => {
     // Finds the cart associated with the userId in the database.
     const cart = await Cart.findOne({ userId });
 
-    // If the cart does not exist or is empty, return `totalItems: 0`.
+    // If the cart does not exist or is empty, return totalItems: 0.
     if (!cart || !cart.items.length) {
       res.status(200).json({ totalItems: 0 });
       return;
     }
 
     // Calculates the total number of items in the cart.
-    // Uses `.reduce()` to iterate over the items array, summing up the `quantity` of each item.
+    // Uses .reduce() to iterate over the items array, summing up the quantity of each item.
     const totalItems = cart.items.reduce(
       (acc: number, item: { quantity: number }) => acc + item.quantity,
       0

@@ -10,7 +10,7 @@ mongoose.connect(
     useNewUrlParser: true,
     useUnifiedTopology: true,
   } as mongoose.ConnectOptions
-); // Explicitly cast to mongoose options
+);
 
 const products = [
   {

@@ -1,21 +1,24 @@
-// Importing necessary modules from React
 import React, { useContext, useEffect, useState } from "react";
-// Importing `Link` from `react-router-dom` to navigate between routes
+// Importing Link from react-router-dom to navigate between routes
 import { Link } from "react-router-dom";
-// Importing icons from `phosphor-react` for shopping cart and user profile
+// Importing icons from phosphor-react for shopping cart and user profile
 import { ShoppingCart, UserCircle } from "phosphor-react";
 // Importing the ShopContext to access global state
 import { ShopContext } from "../context/shop-context";
 import "./navbar.css";
 
-// Dynamically imports the `UserProfile` component using React.lazy() to avoid circular dependency
+// Dynamically imports the UserProfile component using React.lazy() to avoid circular dependency
 const UserProfile = React.lazy(() => import("../pages/profile/userProfile"));
 
 /*
--This `Navbar` component renders a navigation bar with links to the shop and cart pages.  
+-This Navbar component renders a navigation bar with links to the shop and cart pages.  
 -It also displays the total number of items in the cart and a user profile icon. 
 -Clicking the user profile icon toggles a dropdown containing user details.
 -The component fetches cart details from context and listens for outside clicks to close the profile dropdown. 
+React.FC
+- React.FC (React Functional Component) is a TypeScript generic type that ensures 
+- the component follows React’s functional component structure. It provides type 
+- checking for props and includes an implicit children prop by default.
 */
 export const Navbar: React.FC = () => {
   //State to control the visibility of the user profile dropdown
@@ -24,8 +27,8 @@ export const Navbar: React.FC = () => {
   //State to track the total number of items in the cart
   const [totalItems, setTotalItems] = useState<number>(0);
 
-  // Extracts user data, cart items, and a function to get the total cart items from `ShopContext`
-  // Provides default values in case `useContext` returns null
+  // Extracts user data, cart items, and a function to get the total cart items from ShopContext
+  // Provides default values in case useContext returns null
   const { user, getTotalCartItems, cartItems } = useContext(ShopContext) || {
     user: null,
     getTotalCartItems: async () => 0,
@@ -36,7 +39,7 @@ export const Navbar: React.FC = () => {
     const fetchTotalItems = async () => {
       // Calls the context function to get the total number of items in the cart
       const count = await getTotalCartItems();
-      // Updates the `totalItems` state with the fetched count
+      // Updates the totalItems state with the fetched count
       setTotalItems(count);
     };
     fetchTotalItems();

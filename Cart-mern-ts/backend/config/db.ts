@@ -5,7 +5,7 @@ import "dotenv/config";
 //returns a Promise with no resolved value (void)
 const connectDB = async (): Promise<void> => {
   try {
-    // `as string` tells TypeScript to treat it as a string (type assertion)
+    // as string tells TypeScript to treat it as a string (type assertion)
     await mongoose.connect(process.env.MONGO_URI as string);
     console.log("MongoDB Connected");
   } catch (error) {
