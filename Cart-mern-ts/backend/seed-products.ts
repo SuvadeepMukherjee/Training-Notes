@@ -5,13 +5,14 @@ import "dotenv/config";
 const MONGO_URI = process.env.MONGO_URI;
 
 mongoose.connect(
-  MONGO_URI as string,
+  MONGO_URI as string, // Type assertion to ensure it's treated as a string
   {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  } as mongoose.ConnectOptions
+    useNewUrlParser: true, // Ensures MongoDB connection uses the new URL parser
+    useUnifiedTopology: true, // Enables the new Server Discovery and Monitoring engine
+  } as mongoose.ConnectOptions // Type assertion for Mongoose connection options
 );
 
+// Array of product objects to be inserted into the database
 const products = [
   {
     _id: 1,
@@ -47,6 +48,7 @@ const products = [
   },
 ];
 
+// Function to insert the products into the database
 const insertProducts = async () => {
   try {
     await Product.insertMany(products);

@@ -10,6 +10,7 @@ import {
 } from "../controllers/cartController.ts";
 
 // Creating an Express Router instance
+//express.Router() modularize routes ,making the code more organized and reusable
 const router: Router = express.Router();
 
 router.get("/numberCart", numberCart);

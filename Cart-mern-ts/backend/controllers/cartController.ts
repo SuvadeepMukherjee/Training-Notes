@@ -1,14 +1,16 @@
 import Cart from "../models/Cart.ts";
 import Product from "../models/Product.ts";
+
+//IProduct is an interface
 import { IProduct } from "../models/Product.js";
 
 // - Request: Represents the HTTP request object (req).
 // - Response: Represents the HTTP response object (res).
 import { Request, Response } from "express";
-// Return type `Promise<void>` indicates an async function that does not explicitly return a value.
 
 /**
- * Controller to retrieve a user's shopping cart.
+ * Controller to retrieve a user's shopping cart.(Jest passed)
+ * Return type `Promise<void>` indicates an async function that does not explicitly return a value.
  */
 const getCart = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -39,10 +41,16 @@ const getCart = async (req: Request, res: Response): Promise<void> => {
         //Filters out items without a valid product
         .filter((item) => item.product)
         .map((item) => ({
-          productId: (item.product as any)._id,
+          // Extracts product details after populating
+          // Extracts product ID after populating
+          productId: (item.product as any)._id, //`as any` is used to bypass TypeScript's strict typing
+          // Retrieves the product name; defaults to "Product" if name is missing
           productName: (item.product as any).name || "Product",
+          // Retrieves the product price; defaults to 0 if price is missing
           price: (item.product as any).price || 0,
+          // Retrieves the product image URL; defaults to an empty string if missing
           productImage: (item.product as any).image || "",
+          // Retrieves the quantity of the product in the cart
           quantity: item.quantity,
         })),
     };
@@ -68,7 +76,7 @@ interface AddToCartRequest extends Request {
 }
 
 /**
- * Controller to add a product to a user's shopping cart.
+ * Controller to add a product to a user's shopping cart.(Jest Passed)
  */
 const addToCart = async (
   req: AddToCartRequest, // Custom request type ensuring body contains userId,productId and quantity
@@ -79,6 +87,8 @@ const addToCart = async (
   try {
     // Destructuring request body
     const { userId, productId, quantity } = req.body;
+
+    //console.log("Request Body", req.body);
 
     // validate input parameters : ensure userId and productId exist and quantity is greater than 0
     if (!userId || !productId || quantity <= 0) {
@@ -92,14 +102,18 @@ const addToCart = async (
       res.status(400).json({ message: "Product not found" });
       return; //Exit function if product is not found
     }
+    //console.log("Product fetched from DB:", product);
 
     // Find the cart associated with the userId
     let cart = await Cart.findOne({ userId });
+
+    //console.log("Cart fetched from DB:", cart);
 
     // If the user does not have a cart, create a new one
     if (!cart) {
       cart = new Cart({ userId, items: [] });
     }
+    //console.log("Newly created cart before saving:", cart);
 
     // Ensures items is always an array
     cart.items = cart.items || []; // Initialize a new cart with an empty items array
@@ -118,7 +132,9 @@ const addToCart = async (
     }
 
     await cart.save();
+    console.log("Cart after saving:", await Cart.findOne({ userId }));
 
+    //console.log("Cart before sending response", cart);
     // Send a success response with the updated cart details
     res.status(200).json({ message: "Item added to cart successfully", cart });
     //console.log("response send", cart);
@@ -134,7 +150,7 @@ const addToCart = async (
 
 // req: Request represents the incoming request object.
 // res: Response is used to send back the response.
-// Promise<void> indicates that this function is asynchronous and does not return a value directly.
+// Promise<void> indicates that this function is asynchronous and does not return a value directly
 const totalAmount = async (req: Request, res: Response): Promise<void> => {
   try {
     // Extracts userId from the request query parameters.
@@ -214,7 +230,10 @@ const numberCart = async (req: Request, res: Response): Promise<void> => {
     // Sends the total number of items in the cart as a JSON response.
     res.status(200).json({ totalItems });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error });
+    res.status(500).json({
+      message: "Server error",
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
   }
 };
 
@@ -241,9 +260,12 @@ const removeFromCart = async (req: Request, res: Response): Promise<void> => {
     // If cart does not exist, return a 404 Not Found response
     if (!cart) {
       res.status(404).json({ error: "Cart not found" });
+      return;
     }
 
     // Find the index of the product in the cart's items array
+    // The "!" (non-null assertion operator) tells TypeScript that "cart" is not null or undefined.
+    // This allows us to access "cart.items" without TypeScript throwing an error.
     const existingItemIndex = cart!.items.findIndex(
       (item) => String(item.product) === String(productId)
     );
@@ -251,9 +273,11 @@ const removeFromCart = async (req: Request, res: Response): Promise<void> => {
     // If the product is not found in the cart, return a 404 NoT found response
     if (existingItemIndex === -1) {
       res.status(404).json({ error: "Item not in cart" });
+      return;
     }
 
     // Check if the item's quantity is more than 1, then decrement quantity
+    // The "!" (non-null assertion operator) tells TypeScript that "cart" is not null or undefined.
     if (cart!.items[existingItemIndex].quantity > 1) {
       cart!.items[existingItemIndex].quantity -= 1;
     } else {
@@ -261,6 +285,7 @@ const removeFromCart = async (req: Request, res: Response): Promise<void> => {
       cart!.items.splice(existingItemIndex, 1);
     }
 
+    // The "!" (non-null assertion operator) tells TypeScript that "cart" is not null or undefined.
     // If cart is empty, delete it
     if (cart!.items.length === 0) {
       await Cart.deleteOne({ userId });
@@ -268,7 +293,7 @@ const removeFromCart = async (req: Request, res: Response): Promise<void> => {
       return; //Exit early after deleting the cart
     }
 
-    await cart!.save();
+    await cart.save();
 
     // Send a success response with the updated cart details
     res.status(200).json({ message: "Item removed from cart", cart });

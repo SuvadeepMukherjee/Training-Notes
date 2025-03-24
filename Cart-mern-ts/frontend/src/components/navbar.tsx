@@ -35,15 +35,32 @@ export const Navbar: React.FC = () => {
     cartItems: [],
   };
   // Effect to update total cart items whenever cartItems change
+  // useEffect(() => {
+  //   const fetchTotalItems = async () => {
+  //     // Calls the context function to get the total number of items in the cart
+  //     const count = await getTotalCartItems();
+  //     // Updates the totalItems state with the fetched count
+  //     setTotalItems(count);
+  //   };
+  //   fetchTotalItems();
+  //   // Runs the effect when cartItems or getTotalCartItems change
+  // }, [cartItems, getTotalCartItems]);
+
   useEffect(() => {
     const fetchTotalItems = async () => {
-      // Calls the context function to get the total number of items in the cart
       const count = await getTotalCartItems();
-      // Updates the totalItems state with the fetched count
-      setTotalItems(count);
+
+      // Ensure the state update is wrapped inside act() during tests
+      if (process.env.NODE_ENV === "test") {
+        await import("@testing-library/react").then(({ act }) =>
+          act(() => setTotalItems(count))
+        );
+      } else {
+        setTotalItems(count);
+      }
     };
+
     fetchTotalItems();
-    // Runs the effect when cartItems or getTotalCartItems change
   }, [cartItems, getTotalCartItems]);
 
   // Effect to handle closing the user profile dropdown when clicking outside of it
@@ -70,7 +87,7 @@ export const Navbar: React.FC = () => {
         {/* Link to the shop page */}
         <Link to="/">Shop</Link>
         {/* Link to the cart page with a cart icon*/}
-        <Link to="/cart">
+        <Link to="/cart" aria-label="Cart">
           <ShoppingCart size={32} />
           {/* Displays the total cart items count if it's greater than 0 */}
           {totalItems > 0 && <span className="cart-count">{totalItems}</span>}
@@ -82,6 +99,7 @@ export const Navbar: React.FC = () => {
         {/* User profile icon, toggles the dropdown on click */}
         <UserCircle
           size={32}
+          data-testid="profile-icon"
           onClick={() => {
             //console.log("User profile icon clicked");
 

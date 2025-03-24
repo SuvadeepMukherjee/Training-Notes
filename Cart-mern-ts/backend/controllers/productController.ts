@@ -57,10 +57,14 @@ const getProductQuantityInCart = async (
       return;
     }
 
+    //console.log(`Searching for cart with userId:${userId}`);
+    const cartWithoutPopulate = await Cart.findOne({ userId });
     // Find the cart for the given user and populate product details
     const cart: ICart | null = await Cart.findOne({ userId }).populate(
       "items.product"
     );
+
+    //console.log(`Cart found:`, cart);
 
     // If no cart is found, return a 404 error
     if (!cart) {
@@ -77,7 +81,7 @@ const getProductQuantityInCart = async (
     // Respond with the cart details
     res.json({ userId, cartItems });
   } catch (error) {
-    console.error(error);
+    console.log("Error in getProductQuantityInCart", error);
     res.status(500).json({ message: "Server error" });
   }
 };
